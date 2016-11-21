@@ -48,7 +48,7 @@ public abstract class CassandraRepository {
 	   * @return A new Cassandra session
 	   */
 	  protected static Session createSession() {
-	    Cluster cluster = Cluster.builder().addContactPoint("localhost").build();
+	    Cluster cluster = Cluster.builder().addContactPoint("127.0.0.1").build();
 	    return cluster.connect("playlist_comments");
 	  }
 
