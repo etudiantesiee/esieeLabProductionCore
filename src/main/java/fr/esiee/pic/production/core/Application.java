@@ -1,4 +1,4 @@
-package fr.esiee.pic.esieeLabProductionCore;
+package fr.esiee.pic.production.core;
 
 
 import org.apache.logging.log4j.LogManager;

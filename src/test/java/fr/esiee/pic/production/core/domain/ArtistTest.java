@@ -1,7 +1,10 @@
-package fr.esiee.pic.esieeLabProductionCore.domain;
+package fr.esiee.pic.production.core.domain;
 
 import static org.junit.Assert.*;
+
 import org.junit.Test;
+
+import fr.esiee.pic.production.core.domain.Artist;
 
 /**
  * Test unitaire de la classe Artist

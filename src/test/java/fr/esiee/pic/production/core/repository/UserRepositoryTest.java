@@ -1,4 +1,4 @@
-package fr.esiee.pic.esieeLabProductionCore.repository;
+package fr.esiee.pic.production.core.repository;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -9,7 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import fr.esiee.pic.esieeLabProductionCore.Application;
+import fr.esiee.pic.production.core.Application;
+import fr.esiee.pic.production.core.repository.UserRepository;
 
 /**
  * Classe de test unitaire du dépôt d'utilisateur

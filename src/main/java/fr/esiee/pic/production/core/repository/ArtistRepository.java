@@ -1,4 +1,4 @@
-package fr.esiee.pic.esieeLabProductionCore.repository;
+package fr.esiee.pic.production.core.repository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,8 +13,8 @@ import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 
-import fr.esiee.pic.esieeLabProductionCore.domain.Artist;
-import fr.esiee.pic.esieeLabProductionCore.repository.shared.CassandraRepository;
+import fr.esiee.pic.production.core.domain.Artist;
+import fr.esiee.pic.production.core.repository.shared.CassandraRepository;
 
 /**
  * Dépôt des artistes

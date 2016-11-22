@@ -1,4 +1,4 @@
-package fr.esiee.pic.esieeLabProductionCore.domain;
+package fr.esiee.pic.production.core.domain;
 
 /**
  * Represente un utilisateur.

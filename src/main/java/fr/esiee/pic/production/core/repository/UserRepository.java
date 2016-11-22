@@ -1,4 +1,4 @@
-package fr.esiee.pic.esieeLabProductionCore.repository;
+package fr.esiee.pic.production.core.repository;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,8 +10,8 @@ import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 
-import fr.esiee.pic.esieeLabProductionCore.domain.User;
-import fr.esiee.pic.esieeLabProductionCore.repository.shared.CassandraRepository;
+import fr.esiee.pic.production.core.domain.User;
+import fr.esiee.pic.production.core.repository.shared.CassandraRepository;
 
 /**
  * Dépôt des utilisateurs

@@ -1,4 +1,4 @@
-package fr.esiee.pic.esieeLabProductionCore.repository.shared;
+package fr.esiee.pic.production.core.repository.shared;
 
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.Session;
