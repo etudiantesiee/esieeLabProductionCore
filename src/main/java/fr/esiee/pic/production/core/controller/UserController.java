@@ -53,7 +53,7 @@ public class UserController {
 	
 	
 	@RequestMapping(value = "/user/{name}", method = RequestMethod.GET)
-	public HttpEntity<UserBody> getTechnicien(@PathVariable("name") String name) {
+	public HttpEntity<UserBody> findUserByName(@PathVariable("name") String name) {
 		// Recherche de l'utilisateur
 		User user = userRepo.getUserByName(name);
 		

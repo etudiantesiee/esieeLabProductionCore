@@ -104,7 +104,7 @@ public class ArtistRepository extends CassandraRepository {
 	 * Look up a artist by name first letter
 	 * 
 	 */
-	public static List<Artist> listArtistByLetter(String firstLetter,
+	public List<Artist> listArtistByLetter(String firstLetter,
 			boolean desc) {
 
 		String queryText = "SELECT * FROM artists_by_first_letter WHERE first_letter = ?"
