@@ -88,7 +88,7 @@ public class UserRepository extends CassandraRepository {
 	 *            The username address to search
 	 * @return A full UserDAO object
 	 */
-	public static User getUserByName(String username) {
+	public User getUserByName(String username) {
 		String queryText = "SELECT * FROM users where username = ?";
 		PreparedStatement preparedStatement = getSession().prepare(queryText);
 		BoundStatement boundStatement = preparedStatement.bind(username);
