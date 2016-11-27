@@ -15,4 +15,4 @@ rebel.xml
 /.settings
 .settings
 **/testResults/**
-**/.~lock*
+.~lock*
