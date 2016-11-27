@@ -1,6 +1,6 @@
 #!/bin/sh
 # ----------------------------------------------------------------------------
-# edelia launcher for Spring Boot applications
+# Launcher for Spring Boot applications
 # 
 # This script adds the configuration directory to the Spring Boot "classpath"
 # (loader path) before launching the executable (uber) jar as a background job.
@@ -107,14 +107,111 @@ fi
 APP_JAR_PATH="$REPO/${project.artifactId}-${project.version}.${project.packaging}"
 APP_CONF_PATH="$BASEDIR/conf/"
 
-# loader.path param adds the conf directory to the "classpath"
-nohup "$JAVACMD" \
-  -Dloader.path="$APP_CONF_PATH,$APP_JAR_PATH" \
-  -jar "$APP_JAR_PATH" \
-  -Dapp.name="${project.name}" \
-  -Dapp.pid="$$" \
-  -Dapp.repo="$REPO" \
-  -Dapp.home="$BASEDIR" \
-  -Dbasedir="$BASEDIR" \
-  "$@" \
-  >/dev/null 2>&1 &
+# Prog PID file
+PROG_PID_FILE_PATH=$BASEDIR/bin/progId.pid
+
+start() {
+	echo \"Starting $SYSTEME...\"
+	status
+	if [ $? -eq 0 ]; then
+		echo "$PRG (pid $RUNNING_PID) is already running. Aborting."
+		exit 100
+	fi
+	
+	# loader.path param adds the conf directory to the "classpath"
+	nohup "$JAVACMD" \
+	  -Dloader.path="$APP_CONF_PATH,$APP_JAR_PATH" \
+	  -jar "$APP_JAR_PATH" \
+	  -Dapp.name="${project.name}" \
+	  -Dapp.pid="$$" \
+	  -Dapp.repo="$REPO" \
+	  -Dapp.home="$BASEDIR" \
+	  -Dbasedir="$BASEDIR" \
+	  "$@" \
+	  >/dev/null 2>&1 &
+	 
+	 # Create pid file
+	 echo $! > $PROG_PID_FILE_PATH
+	 
+	sleep 1
+	status
+	if [ $? -ne 0 ]; then
+		failure $PRG failed to start. please check the logs.
+		echo
+		exit 1
+	else 
+		echo $PRG started.
+		echo
+		#exit 0
+		return 0
+	fi
+}
+
+stop() {
+	echo -n "Stopping $PRG...  "
+	status
+   
+   if [ $? -ne 0 ]; then 
+   	echo $PRG is not running. Aborting.
+   else
+   	kill `cat $PROG_PID_FILE_PATH` && rm $PROG_PID_FILE_PATH
+   	# checking status
+   	status
+   	if [ $? -eq 0 ]; then
+		echo $PRG failed to stop. please check the logs."
+		echo
+		exit 1
+	else 
+		echo $PRG stopped."
+		echo
+		#exit 0
+    	return 0 
+	fi
+   fi
+}
+
+status() {
+	RUNNING_PID=0
+	if [ -f $PROG_PID_FILE_PATH ]; then
+		TMP_PID=`cat $PROG_PID_FILE_PATH`
+		TMP_PID_CHECK=`ps -p $TMP_PID -o pid=`
+		if [ "$TMP_PID_CHECK" != "" ]; then
+			RUNNING_PID=$TMP_PID
+			return 0  # running
+		else
+			return 1  # stopped, but pid file exists
+		fi
+	fi
+	
+	return 3 # stopped
+}
+
+case "$1" in 
+start)
+	start
+	;;
+stop)
+	stop
+   	;;
+restart)
+   	stop
+   	start
+   	;;
+status)
+   	status
+   	
+	RET=$?
+	if [ $RET -eq 0 ]; then
+		echo "$PRG (pid $RUNNING_PID) is running..."
+	elif [ $RET -eq 1 ]; then
+		echo "$PRG is dead but pidfile ($PROG_PID_FILE_PATH) exists..."
+	else
+		echo "$PRG is stopped."
+	fi
+	exit $RET
+   	;;
+*)
+   echo "Usage: $0 {start|stop|status|restart}"
+esac
+
+exit 0 
