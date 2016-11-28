@@ -114,7 +114,7 @@ start() {
 	echo \"Starting $SYSTEME...\"
 	status
 	if [ $? -eq 0 ]; then
-		echo "$PRG (pid $RUNNING_PID) is already running. Aborting."
+		echo "${project.name} (pid $RUNNING_PID) is already running. Aborting."
 		exit 100
 	fi
 	
@@ -136,11 +136,11 @@ start() {
 	sleep 1
 	status
 	if [ $? -ne 0 ]; then
-		failure $PRG failed to start. please check the logs.
+		failure ${project.name} failed to start. please check the logs.
 		echo
 		exit 1
 	else 
-		echo $PRG started.
+		echo ${project.name} started.
 		echo
 		#exit 0
 		return 0
@@ -148,21 +148,21 @@ start() {
 }
 
 stop() {
-	echo -n "Stopping $PRG...  "
+	echo -n "Stopping ${project.name}...  "
 	status
    
    if [ $? -ne 0 ]; then 
-   	echo $PRG is not running. Aborting.
+   	echo ${project.name} is not running. Aborting.
    else
    	kill `cat $PROG_PID_FILE_PATH` && rm $PROG_PID_FILE_PATH
    	# checking status
    	status
    	if [ $? -eq 0 ]; then
-		echo $PRG failed to stop. please check the logs."
+		echo ${project.name} failed to stop. please check the logs."
 		echo
 		exit 1
 	else 
-		echo $PRG stopped."
+		echo ${project.name} stopped."
 		echo
 		#exit 0
     	return 0 
@@ -202,11 +202,11 @@ status)
    	
 	RET=$?
 	if [ $RET -eq 0 ]; then
-		echo "$PRG (pid $RUNNING_PID) is running..."
+		echo "${project.name} (pid $RUNNING_PID) is running..."
 	elif [ $RET -eq 1 ]; then
-		echo "$PRG is dead but pidfile ($PROG_PID_FILE_PATH) exists..."
+		echo "${project.name} is dead but pidfile ($PROG_PID_FILE_PATH) exists..."
 	else
-		echo "$PRG is stopped."
+		echo "${project.name} is stopped."
 	fi
 	exit $RET
    	;;
