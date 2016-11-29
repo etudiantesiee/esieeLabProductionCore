@@ -45,7 +45,7 @@ public class ArtistController {
 		// Insertion dans le dépôt
 		boolean artistCreationSucess = artistRepo.addArtist(artist);
 		
-		LOGGER.debug("Ajout de l'artiste " + artistName + "avec le retour : " + artistCreationSucess);
+		LOGGER.info("Ajout de l'artiste " + artistName + "avec le retour : " + artistCreationSucess);
 		
 		// Retour HTTP
 		HttpHeaders headers = new HttpHeaders();

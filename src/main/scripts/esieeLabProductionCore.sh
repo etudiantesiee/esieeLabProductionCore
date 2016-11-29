@@ -148,7 +148,7 @@ start() {
 }
 
 stop() {
-	echo -n "Stopping ${project.name}...  "
+	echo "Stopping ${project.name}...  "
 	status
    
    if [ $? -ne 0 ]; then 
