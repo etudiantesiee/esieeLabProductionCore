@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.datastax.driver.core.BoundStatement;
@@ -14,7 +15,7 @@ import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 
 import fr.esiee.pic.production.core.domain.Artist;
-import fr.esiee.pic.production.core.repository.shared.CassandraRepository;
+import fr.esiee.pic.production.core.repository.shared.CassandraManager;
 
 /**
  * Dépôt des artistes
@@ -23,10 +24,13 @@ import fr.esiee.pic.production.core.repository.shared.CassandraRepository;
  * 
  */
 @Repository
-public class ArtistRepository extends CassandraRepository {
+public class ArtistRepository {
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(ArtistRepository.class);
+	
+	@Autowired
+	CassandraManager manager; 
 
 	/**
 	 * Constructeur par defaut
@@ -49,7 +53,7 @@ public class ArtistRepository extends CassandraRepository {
 
 		String queryText = "INSERT INTO artists_by_first_letter (first_letter, artist) values (?, ?) IF NOT EXISTS";
 
-		PreparedStatement preparedStatement = getSession().prepare(queryText);
+		PreparedStatement preparedStatement = manager.getSession().prepare(queryText);
 
 		// Because we use an IF NOT EXISTS clause, we get back a result set with
 		// 1 row containing 1 boolean column called "[applied]"
@@ -57,7 +61,7 @@ public class ArtistRepository extends CassandraRepository {
 
 		String firstLetter = retrieveFirstLetter(artistname);
 
-		ResultSet resultSet = getSession().execute(
+		ResultSet resultSet = manager.getSession().execute(
 				preparedStatement.bind(firstLetter, artistname));
 
 		// Determine if the artist was inserted. If not, throw an exception.
@@ -91,13 +95,13 @@ public class ArtistRepository extends CassandraRepository {
 		String firstLetter = retrieveFirstLetter(artistname);
 
 		String queryText = "DELETE FROM artists_by_first_letter where first_letter = ? and artist = ?";
-		PreparedStatement preparedStatement = getSession().prepare(queryText);
+		PreparedStatement preparedStatement = manager.getSession().prepare(queryText);
 		BoundStatement boundStatement = preparedStatement.bind(firstLetter,
 				artistname);
 
 		// Delete artists with CL = Quorum
 		boundStatement.setConsistencyLevel(ConsistencyLevel.QUORUM);
-		getSession().execute(boundStatement);
+		manager.getSession().execute(boundStatement);
 	}
 
 	/**
@@ -109,10 +113,10 @@ public class ArtistRepository extends CassandraRepository {
 
 		String queryText = "SELECT * FROM artists_by_first_letter WHERE first_letter = ?"
 				+ (desc ? " ORDER BY artist DESC" : "");
-		PreparedStatement preparedStatement = getSession().prepare(queryText);
+		PreparedStatement preparedStatement = manager.getSession().prepare(queryText);
 		BoundStatement boundStatement = preparedStatement.bind(firstLetter);
 
-		ResultSet results = getSession().execute(boundStatement);
+		ResultSet results = manager.getSession().execute(boundStatement);
 
 		List<Artist> artists = new ArrayList<>();
 
